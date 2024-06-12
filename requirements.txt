@@ -1,1 +1,9 @@
 streamlit
+numpy
+pandas
+folium
+streamlit_folium
+geopy
+requests
+pydeck
+geopandas
