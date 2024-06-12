@@ -6,3 +6,4 @@ streamlit_folium
 geopy
 requests
 pydeck
+geopandas
