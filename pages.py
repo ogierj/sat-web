@@ -8,7 +8,7 @@ import time
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 import folium
-from utils import load_known_data
+from utils import load_known_data, create_3d_barchart
 from folium.plugins import HeatMap
 
 
@@ -97,16 +97,6 @@ def prediction_map():
                 st.write(f"Clicked Location: Latitude {lat}, Longitude {lon}")
                 st.write(f"Place Name: {place_name}")
                 st.write(f"Prediction: {prediction}")
-                place_info = df[(df['cluster_lat'] == lat) & (df['cluster_lon'] == lon)]
-                if not place_info.empty:
-                    info = place_info.iloc[0]
-                    st.session_state['clicked_info'] = {
-                        'area_name': info['area_name'],
-                        'Economic Position': info['Economic Position'],
-                        'Demographics': info['Demographics']
-                    }
-                else:
-                    st.warning("No information available for the clicked location.")
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
 
@@ -121,37 +111,34 @@ def prediction_map():
     if 'last_clicked' in map_data and map_data['last_clicked']:
         handle_click([{'coordinates': [map_data['last_clicked']['lng'], map_data['last_clicked']['lat']]}], df)
 
-    # Display clicked info if available
-    if 'clicked_info' in st.session_state:
-        info = st.session_state['clicked_info']
-        st.write(f"### {info['area_name']}")
-        st.write(f"**Economic Position:** {info['Economic Position']}")
-        st.write(f"**Demographics:** {info['Demographics']}")
+def barchart():
+    # Load data
+    data = load_known_data()
 
-    # # Additional feature: Generate prediction based on button click
-    # st.write("## Generate your prediction:")
-    
-    # def stream_data(text, delay=0.04):
-    #     for char in text:
-    #         yield char
-    #         time.sleep(delay)
-    
-    # if st.button("Generate Prediction"):
-    #     if 'last_clicked' in map_data and map_data['last_clicked']:
-    #         clicked_location = map_data['last_clicked']['lat'], map_data['last_clicked']['lng']
-    #         formatted_lat = f"{clicked_location[0]:.6f}"
-    #         formatted_lng = f"{clicked_location[1]:.6f}"
-    #         place_name = get_place_name(formatted_lat, formatted_lng)
-    #         loc = f"Latitude: {formatted_lat}, Longitude: {formatted_lng}"
-    #         place_name_text = f"Place: {place_name}"
-    #         prediction = make_prediction(formatted_lat, formatted_lng)
-    #         pred_text = f"## {prediction}"
-            
-    #         st.write("### Location:")
-    #         st.write_stream(lambda: stream_data(loc))
-    #         st.write_stream(lambda: stream_data(place_name_text))
-            
-    #         st.write("### Prediction:")
-    #         with st.spinner("Calculating..."):
-    #             time.sleep(2)
-    #         st.write_stream(lambda: stream_data(pred_text, delay=0.15))
+    # Separate data for Ethiopia and Nigeria
+    ethiopia_data = data[data['country'] == 'eth']
+    nigeria_data = data[data['country'] == 'ng']
+
+    # Create map for Ethiopia
+    st.header("Ethiopia Map")
+    create_3d_barchart(
+        df=ethiopia_data,
+        lat_col='cluster_lat',
+        lon_col='cluster_lon',
+        elevation_col='cons_pc',
+        tooltip_col=None,  # No tooltip column
+        initial_lat=8.990161,
+        initial_lon=38.754737
+    )
+
+    # Create map for Nigeria
+    st.header("Nigeria Map")
+    create_3d_barchart(
+        df=nigeria_data,
+        lat_col='cluster_lat',
+        lon_col='cluster_lon',
+        elevation_col='cons_pc',
+        tooltip_col=None,  # No tooltip column
+        initial_lat=9.082,
+        initial_lon=8.6753
+    )

@@ -1,12 +1,12 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
-from pages import home, prediction_map, heatmap_page
+from pages import home, prediction_map, heatmap_page, barchart
 
 def main():
     with st.sidebar:
         selected = option_menu(
             menu_title=None,  
-            options=["Home", "Prediction Map", "Heatmaps"],  
+            options=["Home", "Prediction Map", "Heatmaps", "3D Bar Charts"],  
             default_index=0
         )
 
@@ -16,6 +16,8 @@ def main():
         prediction_map()
     elif selected == "Heatmaps":
         heatmap_page()
+    elif selected == "3D Bar Charts":
+        barchart()
 
 if __name__ == "__main__":
     main()
