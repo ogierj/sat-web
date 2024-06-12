@@ -6,8 +6,9 @@ import requests
 import numpy as np
 import time
 from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 import folium
-from utils import make_prediction, get_place_name, load_known_data
+from utils import load_known_data
 from folium.plugins import HeatMap
 
 
@@ -63,12 +64,22 @@ def prediction_map():
     # Load data
     df = load_known_data()
 
-    # Function to get place name from coordinates
+    # Function to get place name from coordinates, including timeout issues and errors
     def get_place_name(lat, lon):
-        geolocator = Nominatim(user_agent="geoapiExercises")
-        location = geolocator.reverse((lat, lon), exactly_one=True)
-        return location.address if location else "Unknown location"
-
+        geolocator = Nominatim(user_agent="geoapiExercises", timeout=10)  # Set timeout to 10 seconds
+        try:
+            location = geolocator.reverse((lat, lon), exactly_one=True)
+            return location.address if location else "Unknown location"
+        except GeocoderTimedOut:
+            return "Geocoding service timed out. Please try again later."
+        except GeocoderServiceError as e:
+            if "403" in str(e):
+                return "Access to the geocoding service was denied. Please try again later."
+            return f"An error occurred: {str(e)}"
+        except Exception as e:
+            return f"An error occurred: {str(e)}"
+    
+    
     # Function to simulate a machine learning prediction
     def make_prediction(lat, lon):
         # In a real scenario, replace this with the actual model prediction
@@ -86,7 +97,6 @@ def prediction_map():
                 st.write(f"Clicked Location: Latitude {lat}, Longitude {lon}")
                 st.write(f"Place Name: {place_name}")
                 st.write(f"Prediction: {prediction}")
-                
                 place_info = df[(df['cluster_lat'] == lat) & (df['cluster_lon'] == lon)]
                 if not place_info.empty:
                     info = place_info.iloc[0]
@@ -107,7 +117,7 @@ def prediction_map():
     # Display the map in the Streamlit app and capture click events
     map_data = st_folium(africa_map, width=700, height=500)
 
-    # Check if a point was clicked and handle the event
+    # # Check if a point was clicked and handle the event
     if 'last_clicked' in map_data and map_data['last_clicked']:
         handle_click([{'coordinates': [map_data['last_clicked']['lng'], map_data['last_clicked']['lat']]}], df)
 
@@ -118,7 +128,7 @@ def prediction_map():
         st.write(f"**Economic Position:** {info['Economic Position']}")
         st.write(f"**Demographics:** {info['Demographics']}")
 
-    # Additional feature: Generate prediction based on button click
+    # # Additional feature: Generate prediction based on button click
     # st.write("## Generate your prediction:")
     
     # def stream_data(text, delay=0.04):
