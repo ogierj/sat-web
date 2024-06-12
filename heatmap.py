@@ -6,7 +6,7 @@ from streamlit_folium import folium_static
 from folium.plugins import HeatMap
 
 # Load data
-@st.cache
+@st.cache_data
 def load_data():
     data = pd.read_csv('eth_cons_pp_clust.csv')
     return data
