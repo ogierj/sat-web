@@ -16,9 +16,6 @@ data = load_data()
 ethiopia_data = data[data['country'] == 'eth']
 nigeria_data = data[data['country'] == 'ng']
 
-st.write("Sample of Ethiopia Data:")
-st.write(ethiopia_data.head())
-
 # Title and description for the heatmaps
 st.title("Consumption Heatmaps")
 st.write("This application shows consumption heatmaps for Ethiopia and Nigeria.")
