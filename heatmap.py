@@ -12,8 +12,6 @@ def load_data():
 # Load the combined data
 data = load_data()
 
-# data['normalized_cons_pc'] = (data['cons_pc'] - data['cons_pc'].min()) / (data['cons_pc'].max() - data['cons_pc'].min())
-
 # Separate data for Ethiopia and Nigeria
 ethiopia_data = data[data['country'] == 'eth']
 nigeria_data = data[data['country'] == 'ng']
