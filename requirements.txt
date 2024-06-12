@@ -3,6 +3,7 @@ numpy
 pandas
 folium
 streamlit_folium
+streamlit-option-menu
 geopy
 requests
 pydeck
