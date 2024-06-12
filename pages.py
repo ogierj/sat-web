@@ -10,6 +10,7 @@ from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 import folium
 from utils import load_known_data, create_3d_barchart
 from folium.plugins import HeatMap
+from PIL import Image
 
 
 def home():
@@ -82,9 +83,17 @@ def prediction_map():
     
     # Function to simulate a machine learning prediction
     def make_prediction(lat, lon):
-        # In a real scenario, replace this with the actual model prediction
-        # For example: return model.predict([lat, lon])
-        return np.random.choice(["Class A", "Class B", "Class C"])
+        prediction_url = "https://europe-west1-to2jlnuczq-ew.a.run.app/predict"
+        
+        params = {
+        "lat": lat,
+        "lon": lon
+        }
+        response = requests.get(prediction_url, params=params)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return None
 
     # Handle the click event
     def handle_click(map_data, df):
@@ -96,7 +105,14 @@ def prediction_map():
                 prediction = make_prediction(lat, lon)
                 st.write(f"Clicked Location: Latitude {lat}, Longitude {lon}")
                 st.write(f"Place Name: {place_name}")
-                st.write(f"Prediction: {prediction}")
+                st.write(f"Prediction: {prediction['consumption']}")
+                # image_data_str = prediction.get("image", "")
+                # image_data_str = image_data_str.replace('...', '0')
+                # image_data_list = [[[float(val) for val in elem.strip().split()] for elem in row.strip().split(']') if elem.strip()] for row in image_data_str.strip('[]').split('[') if row.strip()]
+                # image_data = np.array(image_data_list).reshape((256, 256, 3))
+                # image_data = np.array(image_data_list)
+                # image = Image.fromarray((image_data * 255).astype(np.uint8))
+                # st.image(image, caption='Predicted Image', use_column_width=True)
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
 
