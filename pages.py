@@ -115,7 +115,7 @@ def prediction_map(api_key):
                 # PLANET_API_KEY = os.getenv("PLANET_API_KEY")
                 client = PlanetDownloader(api_key)
                 img = client.download_image(lat, lon, 2015, 1, 2016, 12, zoom=15)
-                st.image(img, caption="Satellite Image", use_column_width=True)
+                st.markdown(img, caption="Satellite Image", use_column_width=True)
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
 
