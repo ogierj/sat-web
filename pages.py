@@ -65,25 +65,25 @@ def heatmap_page():
 
 def prediction_map(api_key):
     st.title("Prediction by Location")
-    st.write("Click anywhere (read: Nigeria or Ethiopia) on the map of Africa to choose a location for prediction.")
+    st.write("Click anywhere on the map of Africa to choose a location for prediction. © OpenStreetMap © Planet")
     api_key = api_key
     # Load data
     df = load_known_data()
 
     # Function to get place name from coordinates, including timeout issues and errors
-    def get_place_name(lat, lon):
-        geolocator = Nominatim(user_agent="geoapiExercises", timeout=10)  # Set timeout to 10 seconds
-        try:
-            location = geolocator.reverse((lat, lon), exactly_one=True)
-            return location.address if location else "Unknown location"
-        except GeocoderTimedOut:
-            return "Geocoding service timed out. Please try again later."
-        except GeocoderServiceError as e:
-            if "403" in str(e):
-                return "Access to the geocoding service was denied. Please try again later."
-            return f"An error occurred: {str(e)}"
-        except Exception as e:
-            return f"An error occurred: {str(e)}"
+    # def get_place_name(lat, lon):
+    #     geolocator = Nominatim(user_agent="geoapiExercises", timeout=10)  # Set timeout to 10 seconds
+    #     try:
+    #         location = geolocator.reverse((lat, lon), exactly_one=True)
+    #         return location.address if location else "Unknown location"
+    #     except GeocoderTimedOut:
+    #         return "Geocoding service timed out. Please try again later."
+    #     except GeocoderServiceError as e:
+    #         if "403" in str(e):
+    #             return "Access to the geocoding service was denied. Please try again later."
+    #         return f"An error occurred: {str(e)}"
+    #     except Exception as e:
+    #         return f"An error occurred: {str(e)}"
     
     
     # Function to simulate a machine learning prediction
@@ -106,11 +106,11 @@ def prediction_map(api_key):
             if map_data:
                 clicked = map_data[0]
                 lon, lat = clicked['coordinates']
-                place_name = get_place_name(lat, lon)
+                # place_name = get_place_name(lat, lon)
                 prediction = make_prediction(lat, lon)
                 st.write(f"Clicked Location: Latitude {lat}, Longitude {lon}")
-                st.write(f"Place Name: {place_name}")
-                st.write(f"Prediction: {prediction['consumption']} (US$ at purchasing power parity (2015))")
+                # st.write(f"Place Name: {place_name}")
+                st.write(f"Prediction: {prediction['consumption']} (USD per person per capita)")
                 # PLANET_API_KEY = os.getenv("PLANET_API_KEY")
                 client = PlanetDownloader(api_key)
                 img = client.download_image(lat, lon, 2015, 1, 2016, 12, zoom=15)
