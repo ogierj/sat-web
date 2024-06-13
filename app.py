@@ -2,6 +2,8 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 from pages import home, prediction_map, heatmap_page, barchart
 
+api_key = st.secrets("PLANET_API_KEY")
+
 def main():
     with st.sidebar:
         selected = option_menu(

@@ -8,3 +8,6 @@ geopy
 requests
 pydeck
 geopandas
+matplotlib
+requests
+shapely
