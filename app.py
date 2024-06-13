@@ -10,7 +10,8 @@ def main():
     with st.sidebar:
         selected = option_menu(
             menu_title=None,  
-            options=["Home", "Prediction Map", "Heatmaps", "3D Bar Charts"],  
+            options=["Home", "Prediction Map", "Heatmaps"],
+            # options=["Home", "Prediction Map", "Heatmaps", "3D Bar Charts"],  
             default_index=0
         )
 
@@ -20,8 +21,8 @@ def main():
         prediction_map(api_key)
     elif selected == "Heatmaps":
         heatmap_page()
-    elif selected == "3D Bar Charts":
-        barchart()
+    # elif selected == "3D Bar Charts":
+    #     barchart()
 
 if __name__ == "__main__":
     main()
