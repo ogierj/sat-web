@@ -110,7 +110,7 @@ def prediction_map(api_key):
                 prediction = make_prediction(lat, lon)
                 st.write(f"Clicked Location: Latitude {lat}, Longitude {lon}")
                 # st.write(f"Place Name: {place_name}")
-                consumption_value = f"{prediction['consumption']:.2f}"
+                consumption_value = f"{float(prediction['consumption']):.2f}"
                 st.write(f"##Prediction: {consumption_value} (USD per capita)")
                 # PLANET_API_KEY = os.getenv("PLANET_API_KEY")
                 client = PlanetDownloader(api_key)
