@@ -105,7 +105,7 @@ def prediction_map():
                 prediction = make_prediction(lat, lon)
                 st.write(f"Clicked Location: Latitude {lat}, Longitude {lon}")
                 st.write(f"Place Name: {place_name}")
-                st.write(f"Prediction: {prediction['consumption']}")
+                st.write(f"Prediction: {prediction['consumption']} (at purchasing power parity (2015))")
                 # image_data_str = prediction.get("image", "")
                 # image_data_str = image_data_str.replace('...', '0')
                 # image_data_list = [[[float(val) for val in elem.strip().split()] for elem in row.strip().split(']') if elem.strip()] for row in image_data_str.strip('[]').split('[') if row.strip()]
