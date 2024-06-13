@@ -4,7 +4,7 @@ from pages import home, prediction_map, heatmap_page, barchart
 
 api_key = st.secrets['api_key']
 
-st.write(api_key)
+# st.write(api_key)
 
 def main():
     with st.sidebar:
