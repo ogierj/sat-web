@@ -111,11 +111,11 @@ def prediction_map(api_key):
                 st.write(f"Clicked Location: Latitude {lat}, Longitude {lon}")
                 # st.write(f"Place Name: {place_name}")
                 consumption_value = f"{float(prediction['consumption']):.2f}"
-                st.write(f"##Prediction: {consumption_value} (USD per capita)")
+                st.markdown(f"##Prediction: {consumption_value} (USD per capita)")
                 # PLANET_API_KEY = os.getenv("PLANET_API_KEY")
                 client = PlanetDownloader(api_key)
                 img = client.download_image(lat, lon, 2015, 1, 2016, 12, zoom=15)
-                st.markdown(img, caption="Satellite Image", use_column_width=True)
+                st.image(img, caption="Satellite Image", use_column_width=True)
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
 
