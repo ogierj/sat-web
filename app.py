@@ -2,7 +2,9 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 from pages import home, prediction_map, heatmap_page, barchart
 
-api_key = st.secrets("PLANET_API_KEY")
+api_key = st.secrets("api_key")
+
+st.write(api_key)
 
 def main():
     with st.sidebar:
@@ -15,7 +17,7 @@ def main():
     if selected == "Home":
         home()
     elif selected == "Prediction Map":
-        prediction_map()
+        prediction_map(api_key)
     elif selected == "Heatmaps":
         heatmap_page()
     elif selected == "3D Bar Charts":
