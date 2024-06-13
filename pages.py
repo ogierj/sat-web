@@ -11,6 +11,11 @@ import folium
 from utils import load_known_data, create_3d_barchart
 from folium.plugins import HeatMap
 from PIL import Image
+# from dotenv import load_dotenv
+from utils import PlanetDownloader
+import matplotlib.pyplot as plt
+import os
+
 
 
 def home():
@@ -58,10 +63,10 @@ def heatmap_page():
     HeatMap(nig_heat_data, radius=15, blur=10, max_zoom=1).add_to(nig_map)
     folium_static(nig_map)
 
-def prediction_map():
+def prediction_map(api_key):
     st.title("Prediction by Location")
     st.write("Click anywhere (read: Nigeria or Ethiopia) on the map of Africa to choose a location for prediction.")
-    
+    api_key = api_key
     # Load data
     df = load_known_data()
 
@@ -106,13 +111,10 @@ def prediction_map():
                 st.write(f"Clicked Location: Latitude {lat}, Longitude {lon}")
                 st.write(f"Place Name: {place_name}")
                 st.write(f"Prediction: {prediction['consumption']} (US$ at purchasing power parity (2015))")
-                # image_data_str = prediction.get("image", "")
-                # image_data_str = image_data_str.replace('...', '0')
-                # image_data_list = [[[float(val) for val in elem.strip().split()] for elem in row.strip().split(']') if elem.strip()] for row in image_data_str.strip('[]').split('[') if row.strip()]
-                # image_data = np.array(image_data_list).reshape((256, 256, 3))
-                # image_data = np.array(image_data_list)
-                # image = Image.fromarray((image_data * 255).astype(np.uint8))
-                # st.image(image, caption='Predicted Image', use_column_width=True)
+                # PLANET_API_KEY = os.getenv("PLANET_API_KEY")
+                client = PlanetDownloader(api_key)
+                img = client.download_image(lat, lon, 2015, 1, 2016, 12, zoom=15)
+                st.image(img, caption="Satellite Image", use_column_width=True)
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
 
