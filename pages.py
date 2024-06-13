@@ -110,7 +110,7 @@ def prediction_map(api_key):
                 prediction = make_prediction(lat, lon)
                 st.write(f"Clicked Location: Latitude {lat}, Longitude {lon}")
                 # st.write(f"Place Name: {place_name}")
-                st.write(f"Prediction: {prediction['consumption']} (USD per person per capita)")
+                st.write(f"##Prediction: {prediction['consumption']:.2f} (USD per capita)")
                 # PLANET_API_KEY = os.getenv("PLANET_API_KEY")
                 client = PlanetDownloader(api_key)
                 img = client.download_image(lat, lon, 2015, 1, 2016, 12, zoom=15)
